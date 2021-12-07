@@ -13,8 +13,8 @@ export default function Header() {
           <Image
             src="/images/logo.svg"
             alt="Logo Board"
-            width={60}
-            height={60}
+            width={70}
+            height={70}
           />
         </Link>
         <nav>
