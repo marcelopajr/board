@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import Head from 'next/head';
-import Image from 'next/image';
 
 import styles from '../styles/styles.module.scss';
 
@@ -11,12 +10,7 @@ export default function Home() {
         <title>Board | Organizando tarefas</title>
       </Head>
       <main className={styles.contentContainer}>
-        <Image
-          src="/images/board-user.svg"
-          alt="Ferramenta Board"
-          width={600}
-          height={500}
-        />
+        <img src="/images/board-user.svg" alt="Ferramenta board" />
 
         <section className={styles.callToAction}>
           <h1>
