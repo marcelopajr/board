@@ -2,7 +2,9 @@ import { useState, FormEvent } from 'react';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 import Head from 'next/head';
+import Link from 'next/link';
 import firebase from '../../services/firebaseConnection';
+import { format } from 'date-fns';
 import { FiPlus, FiCalendar, FiEdit2, FiTrash, FiClock } from 'react-icons/fi';
 import SupportButton from '../../components/SupportButton';
 
@@ -17,6 +19,7 @@ interface BoardProps {
 
 export default function Board({ user }: BoardProps) {
   const [input, setInput] = useState('');
+  const [taskList, setTaskList] = useState([]);
 
   async function handleAddTask(e: FormEvent) {
     e.preventDefault();
@@ -37,6 +40,18 @@ export default function Board({ user }: BoardProps) {
       })
       .then((doc) => {
         console.log('Cadastrado com sucesso!');
+
+        let data = {
+          id: doc.id,
+          created: new Date(),
+          createdFormatted: format(new Date(), 'dd MMMM yyyy'),
+          tarefa: input,
+          userId: user.id,
+          nome: user.nome,
+        };
+
+        setTaskList([...taskList, data]);
+        setInput('');
       })
       .catch((err) => {
         console.log('Erro ao cadastrar: ', err);
@@ -64,26 +79,30 @@ export default function Board({ user }: BoardProps) {
         <h1>Você tem 2 tarefas!</h1>
 
         <section>
-          <article className={styles.taskList}>
-            <p>Estudar NextJs</p>
-            <div className={styles.actions}>
-              <div>
+          {taskList.map((task) => (
+            <article className={styles.taskList} key={task.id}>
+              <Link href={`/board/${task.id}`} passHref>
+                <p>{task.tarefa}</p>
+              </Link>
+              <div className={styles.actions}>
                 <div>
-                  <FiCalendar size={20} color="#ffb800" />
-                  <time>17 Julho 2021</time>
+                  <div>
+                    <FiCalendar size={20} color="#ffb800" />
+                    <time>{task.createdFormatted}</time>
+                  </div>
+                  <button>
+                    <FiEdit2 size={20} color="#fff" />
+                    <span>Editar</span>
+                  </button>
                 </div>
+
                 <button>
-                  <FiEdit2 size={20} color="#fff" />
-                  <span>Editar</span>
+                  <FiTrash size={20} color="#ff3636" />
+                  <span>Excluir</span>
                 </button>
               </div>
-
-              <button>
-                <FiTrash size={20} color="#ff3636" />
-                <span>Excluir</span>
-              </button>
-            </div>
-          </article>
+            </article>
+          ))}
         </section>
       </main>
 
