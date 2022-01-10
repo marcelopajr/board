@@ -4,7 +4,8 @@ import { getSession } from 'next-auth/client';
 import Head from 'next/head';
 import Link from 'next/link';
 import firebase from '../../services/firebaseConnection';
-import { format } from 'date-fns';
+import { format, formatDistance } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import {
   FiPlus,
   FiCalendar,
@@ -31,6 +32,8 @@ interface BoardProps {
   user: {
     nome: string;
     id: string;
+    vip: boolean;
+    lastDonate: string | Date;
   };
   data: string;
 }
@@ -168,10 +171,12 @@ export default function Board({ user, data }: BoardProps) {
                     <FiCalendar size={20} color="#ffb800" />
                     <time>{task.createdFormatted}</time>
                   </div>
-                  <button onClick={() => handleEditTask(task)}>
-                    <FiEdit2 size={20} color="#fff" />
-                    <span>Editar</span>
-                  </button>
+                  {user.vip && (
+                    <button onClick={() => handleEditTask(task)}>
+                      <FiEdit2 size={20} color="#fff" />
+                      <span>Editar</span>
+                    </button>
+                  )}
                 </div>
 
                 <button onClick={() => handleDelete(task.id)}>
@@ -184,13 +189,21 @@ export default function Board({ user, data }: BoardProps) {
         </section>
       </main>
 
-      <div className={styles.vipContainer}>
-        <h3>Obrigado por apoiar esse projeto.</h3>
-        <div>
-          <FiClock size={28} color="#fff" />
-          <time>Última doação foi a 3 dias.</time>
+      {user.vip && (
+        <div className={styles.vipContainer}>
+          <h3>Obrigado por apoiar esse projeto.</h3>
+          <div>
+            <FiClock size={28} color="#fff" />
+            <time>
+              Última doação foi{' '}
+              {formatDistance(new Date(user.lastDonate), new Date(), {
+                locale: ptBR,
+              })}
+              .
+            </time>
+          </div>
         </div>
-      </div>
+      )}
 
       <SupportButton />
     </>
@@ -230,6 +243,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const user = {
     nome: session?.user.name,
     id: session?.id,
+    vip: session?.vip,
+    lastDonate: session?.lastDonate,
   };
 
   return {
