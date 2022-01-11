@@ -1,5 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
+import Image from 'next/image';
+import logo from '../../../public/images/logo.svg';
 
 import SignInButton from '../SignInButton';
 
@@ -10,7 +11,9 @@ export default function Header() {
     <header className={styles.headerContainer}>
       <div className={styles.headerContent}>
         <Link href="/" passHref>
-          <img src="/images/logo.svg" alt="Logo Meu board" />
+          <a>
+            <Image src={logo} alt="Logo Meu board" />
+          </a>
         </Link>
         <nav>
           <Link href="/">

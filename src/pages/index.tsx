@@ -1,8 +1,9 @@
-/* eslint-disable @next/next/no-img-element */
 import { useState } from 'react';
 import { GetStaticProps } from 'next';
-import Head from 'next/head';
 import firebase from '../services/firebaseConnection';
+import Head from 'next/head';
+import Image from 'next/image';
+import boardUser from '../../public/images/board-user.svg';
 
 import styles from '../styles/styles.module.scss';
 
@@ -26,7 +27,7 @@ export default function Home({ data }: HomeProps) {
         <title>Board | Organizando tarefas</title>
       </Head>
       <main className={styles.contentContainer}>
-        <img src="/images/board-user.svg" alt="Ferramenta board" />
+        <Image src={boardUser} alt="Ferramenta board" />
 
         <section className={styles.callToAction}>
           <h1>
@@ -40,7 +41,14 @@ export default function Home({ data }: HomeProps) {
         {donaters.length !== 0 && <h3>Apoiadores:</h3>}
         <div className={styles.donators}>
           {donaters.map((item) => (
-            <img key={item.image} src={item.image} alt="Foto de usuário" />
+            <Image
+              key={item.image}
+              width={65}
+              height={65}
+              src={item.image}
+              alt="Foto de usuário"
+              objectFit="fill"
+            />
           ))}
         </div>
       </main>

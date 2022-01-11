@@ -1,10 +1,11 @@
-/* eslint-disable @next/next/no-img-element */
 import { useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
-import Head from 'next/head';
-import { PayPalButtons } from '@paypal/react-paypal-js';
 import firebase from '../../services/firebaseConnection';
+import { PayPalButtons } from '@paypal/react-paypal-js';
+import Head from 'next/head';
+import Image from 'next/image';
+import rocketImg from '../../../public/images/rocket.svg';
 
 import styles from './styles.module.scss';
 
@@ -37,11 +38,16 @@ export default function Donate({ user }: DonateProps) {
       </Head>
 
       <main className={styles.container}>
-        <img src="/images/rocket.svg" alt="Seja apoiador" />
+        <Image src={rocketImg} alt="Seja apoiador" />
 
         {vip && (
           <div className={styles.vip}>
-            <img src={user.image} alt="Foto de perfil do usuário" />
+            <Image
+              width={50}
+              height={50}
+              src={user.image}
+              alt="Foto de perfil do usuário"
+            />
             <span>Parabéns, você é um novo apoiador!</span>
           </div>
         )}

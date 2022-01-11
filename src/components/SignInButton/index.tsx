@@ -1,5 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
 import { signIn, signOut, useSession } from 'next-auth/client';
+import Image from 'next/image';
 import { FaGithub } from 'react-icons/fa';
 import { FiX } from 'react-icons/fi';
 
@@ -14,7 +14,15 @@ export default function SignInButton() {
       className={styles.signInButton}
       onClick={() => signOut()}
     >
-      <img src={session.user.image} alt="Imagem do usuário" />
+      <div>
+        <Image
+          width={35}
+          height={35}
+          src={session.user.image}
+          alt="Imagem do usuário"
+          objectFit="fill"
+        />
+      </div>
       Olá {session.user.name}
       <FiX color="#737380" className={styles.closeIcon} />
     </button>
